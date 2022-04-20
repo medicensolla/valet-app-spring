@@ -21,6 +21,7 @@ public class Valet extends User {
             strategy = GenerationType.SEQUENCE,
             generator = "valet_sequence"
     )
+    @Column(name = "valet_id")
     private Long id;
 
     private String firstName;

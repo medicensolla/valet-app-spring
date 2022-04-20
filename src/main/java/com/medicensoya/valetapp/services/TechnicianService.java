@@ -4,6 +4,7 @@ import com.medicensoya.valetapp.domain.Car;
 import com.medicensoya.valetapp.domain.Technician;
 import com.medicensoya.valetapp.dto.CarDto;
 import com.medicensoya.valetapp.dto.TechnicianDto;
+import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
+    private final CarRepository carRepository;
 
     /**
      * Creation of a Technician
@@ -34,12 +36,11 @@ public class TechnicianService {
 
     public TechnicianDto requestCars(Long idTechnician,
                                      Set<Car> requestedCars) {
-        Technician technicianUpdate = this.technicianRepository.getById(idTechnician);
-        technicianUpdate.setRequestedCars(requestedCars);
-        Technician technicianResponse = this.technicianRepository.save(technicianUpdate);
-        return this.converterFromObjToDto(technicianResponse);
-
-
+        Technician technicianUpdate = this.technicianRepository.getTechnicianById(idTechnician);
+        requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
+        technicianUpdate.getRequestedCars().addAll(requestedCars);
+        this.technicianRepository.save(technicianUpdate);
+        return this.converterFromObjToDto(technicianUpdate);
     }
 
 

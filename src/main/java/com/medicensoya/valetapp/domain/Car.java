@@ -11,17 +11,30 @@ import javax.persistence.*;
 public class Car {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "car_sequence",
+            sequenceName = "car_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "car_sequence"
+    )
+    @Column(name = "car_id")
     private Long id;
 
     private String tagNumber;
 
     @ManyToOne
-    @JoinColumn(name = "valet_id", nullable = false)
+    @JoinColumn(name = "valet_id")
     private Valet valet;
 
     @ManyToOne
-    @JoinColumn(name = "technician_id", nullable = false)
+    @JoinColumn(name = "technician_id")
     private Technician technician;
 
+    public Car(String tagNumber, Technician technician) {
+        this.tagNumber = tagNumber;
+        this.technician = technician;
+    }
 }

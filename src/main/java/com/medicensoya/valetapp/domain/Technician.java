@@ -5,12 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+//TODO : JsonIgnore User
 public class Technician extends User {
 
     @Id
@@ -20,9 +22,10 @@ public class Technician extends User {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.IDENTITY,
             generator = "technician_sequence"
     )
+    @Column(name = "technician_id")
     private Long id;
 
     private String firstName;
@@ -31,8 +34,9 @@ public class Technician extends User {
     @Enumerated(EnumType.STRING)
     private final AppUserRole appUserRole = AppUserRole.TECH;
 
-    @OneToMany(mappedBy = "technician")
-    private Set<Car> requestedCars;
+    @OneToMany(mappedBy = "technician", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Car> requestedCars = new HashSet<>();
 
     public Technician(String username, String password, String firstName, String lastName,
                       Set<Car> requestedCars) {
