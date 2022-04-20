@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-//TODO : JsonIgnore User
+//TODO : JsonIgnore User a
 public class Technician extends User {
 
     @Id
