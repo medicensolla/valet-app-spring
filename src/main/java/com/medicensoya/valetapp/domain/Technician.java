@@ -25,7 +25,6 @@ public class Technician extends User {
             strategy = GenerationType.IDENTITY,
             generator = "technician_sequence"
     )
-    @Column(name = "technician_id")
     private Long id;
 
     private String firstName;

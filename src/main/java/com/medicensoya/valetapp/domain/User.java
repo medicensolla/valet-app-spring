@@ -1,6 +1,5 @@
 package com.medicensoya.valetapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +12,7 @@ import javax.persistence.MappedSuperclass;
 @NoArgsConstructor
 public abstract class User {
 
-
     private String username;
-
     private String password;
 
 

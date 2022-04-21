@@ -18,7 +18,7 @@ public class TechnicianController {
     private final TechnicianService technicianService;
 
 
-    @PostMapping("/create-technician")
+    @PostMapping("/create")
     public ResponseEntity<TechnicianDto> createTechnician(@RequestBody TechnicianDto technicianDto) {
 
         TechnicianDto technicianResponseDto = this.technicianService.createTechnician(technicianDto);
@@ -28,12 +28,12 @@ public class TechnicianController {
     }
 
     @PutMapping("/request-car")
-    public ResponseEntity<TechnicianDto> requestACar(@RequestParam Long technicianId,
-                                                     @RequestBody Set<Car> requestedCars) {
+    public ResponseEntity<String> requestACar(@RequestParam Long technicianId,
+                                              @RequestBody Set<Car> requestedCars) {
 
-        TechnicianDto technicianResponseDto = this.technicianService.requestCars(technicianId, requestedCars);
+        String responseFromService = this.technicianService.requestCars(technicianId, requestedCars);
 
-        return new ResponseEntity<>(technicianResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(responseFromService, HttpStatus.OK);
 
     }
 

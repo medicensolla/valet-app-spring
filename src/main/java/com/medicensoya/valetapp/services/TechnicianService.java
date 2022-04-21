@@ -2,16 +2,14 @@ package com.medicensoya.valetapp.services;
 
 import com.medicensoya.valetapp.domain.Car;
 import com.medicensoya.valetapp.domain.Technician;
-import com.medicensoya.valetapp.dto.CarDto;
 import com.medicensoya.valetapp.dto.TechnicianDto;
-import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ import java.util.Set;
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
-    private final CarRepository carRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * Creation of a Technician
@@ -30,17 +28,33 @@ public class TechnicianService {
      */
     public TechnicianDto createTechnician(TechnicianDto technicianDto) {
         Technician newTechnician = this.converterFromDtoToObject(technicianDto);
-        Technician technicianResponse = this.technicianRepository.save(newTechnician);
-        return this.converterFromObjToDto(technicianResponse);
+        if (this.technicianValidations(newTechnician)) {
+            newTechnician.setPassword(bCryptPasswordEncoder.encode(newTechnician.getPassword()));
+            Technician technicianResponse = this.technicianRepository.save(newTechnician);
+            technicianDto = this.converterFromObjToDto(technicianResponse);
+        }
+        return technicianDto;
     }
 
-    public TechnicianDto requestCars(Long idTechnician,
-                                     Set<Car> requestedCars) {
+    /**
+     * Service for the technicians that ables them to request cars/
+     *
+     * @param idTechnician  Technician requesting this cars
+     * @param requestedCars The cars that are being requested
+     * @return String with message
+     */
+    public String requestCars(Long idTechnician,
+                              Set<Car> requestedCars) {
         Technician technicianUpdate = this.technicianRepository.getTechnicianById(idTechnician);
-        requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
-        technicianUpdate.getRequestedCars().addAll(requestedCars);
-        this.technicianRepository.save(technicianUpdate);
-        return this.converterFromObjToDto(technicianUpdate);
+        if (Objects.nonNull(technicianUpdate)) {
+            requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
+            technicianUpdate.getRequestedCars().addAll(requestedCars);
+            this.technicianRepository.save(technicianUpdate);
+        } else {
+            throw new IllegalStateException("This Technician doesn't have access");
+        }
+        //TODO Change response
+        return "Success";
     }
 
 
@@ -56,13 +70,7 @@ public class TechnicianService {
     private TechnicianDto converterFromObjToDto(Technician technician) {
 
         TechnicianDto technicianDto = new TechnicianDto();
-
-        if (this.technicianValidations(technician)) {
-
-            BeanUtils.copyProperties(technician, technicianDto);
-
-        }
-
+        BeanUtils.copyProperties(technician, technicianDto);
         return technicianDto;
     }
 

@@ -20,7 +20,6 @@ public class Car {
             strategy = GenerationType.SEQUENCE,
             generator = "car_sequence"
     )
-    @Column(name = "car_id")
     private Long id;
 
     private String tagNumber;
