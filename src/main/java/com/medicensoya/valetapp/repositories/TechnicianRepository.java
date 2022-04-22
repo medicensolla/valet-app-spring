@@ -12,4 +12,6 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public interface TechnicianRepository extends JpaRepository<Technician, Long> {
     Technician getTechnicianById(Long id);
+
+    Boolean existsByUsername(String username);
 }

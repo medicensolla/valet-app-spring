@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
@@ -19,7 +20,8 @@ public class TechnicianController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<TechnicianDto> createTechnician(@RequestBody TechnicianDto technicianDto) {
+    public ResponseEntity<Object> createTechnician(@RequestBody TechnicianDto technicianDto)
+            throws ResponseStatusException {
 
         TechnicianDto technicianResponseDto = this.technicianService.createTechnician(technicianDto);
 
@@ -28,7 +30,7 @@ public class TechnicianController {
     }
 
     @PutMapping("/request-car")
-    public ResponseEntity<String> requestACar(@RequestParam Long technicianId,
+    public ResponseEntity<Object> requestACar(@RequestParam Long technicianId,
                                               @RequestBody Set<Car> requestedCars) {
 
         String responseFromService = this.technicianService.requestCars(technicianId, requestedCars);
