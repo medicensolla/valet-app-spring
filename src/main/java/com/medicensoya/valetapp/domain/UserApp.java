@@ -10,13 +10,13 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class User {
+public abstract class UserApp {
 
     private String username;
     private String password;
 
 
-    public User(String username, String password) {
+    public UserApp(String username, String password) {
         this.username = username;
         this.password = password;
     }

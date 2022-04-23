@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Valet extends User {
+public class Valet extends UserApp {
 
     @Id
     @SequenceGenerator(

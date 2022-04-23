@@ -3,16 +3,13 @@ package com.medicensoya.valetapp.services;
 import com.medicensoya.valetapp.domain.Car;
 import com.medicensoya.valetapp.domain.Technician;
 import com.medicensoya.valetapp.dto.TechnicianDto;
-import com.medicensoya.valetapp.exception.ApiException;
 import com.medicensoya.valetapp.exception.ApiRequestException;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 import java.util.Set;
@@ -55,7 +52,7 @@ public class TechnicianService {
             technicianUpdate.getRequestedCars().addAll(requestedCars);
             this.technicianRepository.save(technicianUpdate);
         } else {
-            throw new IllegalStateException("This Technician doesn't have access");
+            throw new ApiRequestException("This Technician doesn't have access");
         }
         //TODO Change response
         return "Success";
@@ -86,13 +83,13 @@ public class TechnicianService {
 
             if (!StringUtils.hasText(technician.getFirstName())) {
 
-                throw new IllegalStateException("First Name is Mandatory");
+                throw new ApiRequestException("First Name is Mandatory");
 
             } else if (!StringUtils.hasText(technician.getLastName())) {
-                throw new IllegalStateException("Last Name is Mandatory");
+                throw new ApiRequestException("Last Name is Mandatory");
 
             } else if (!StringUtils.hasText(technician.getUsername())) {
-                throw new IllegalStateException("UserName is Mandatory");
+                throw new ApiRequestException("UserName is Mandatory");
             } else if (this.technicianRepository.existsByUsername(technician.getUsername())) {
                 throw new ApiRequestException("This Username is taken");
             } else {
@@ -100,7 +97,7 @@ public class TechnicianService {
             }
 
         } else {
-            throw new IllegalStateException("Technician can't be empty");
+            throw new ApiRequestException("Technician can't be empty");
         }
 
         return isValid;

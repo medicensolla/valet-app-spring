@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 //TODO : JsonIgnore User a
-public class Technician extends User {
+public class Technician extends UserApp {
 
     @Id
     @SequenceGenerator(

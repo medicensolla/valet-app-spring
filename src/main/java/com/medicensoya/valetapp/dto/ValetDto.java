@@ -1,7 +1,7 @@
 package com.medicensoya.valetapp.dto;
 
 import com.medicensoya.valetapp.domain.Car;
-import com.medicensoya.valetapp.domain.User;
+import com.medicensoya.valetapp.domain.UserApp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ValetDto extends User {
+public class ValetDto extends UserApp {
 
     private String firstName;
     private String lastName;

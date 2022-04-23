@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -14,4 +15,6 @@ public interface TechnicianRepository extends JpaRepository<Technician, Long> {
     Technician getTechnicianById(Long id);
 
     Boolean existsByUsername(String username);
+
+    Optional<Technician> findTechnicianByUsername(String username);
 }
