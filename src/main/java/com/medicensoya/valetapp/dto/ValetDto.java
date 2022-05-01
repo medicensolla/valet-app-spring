@@ -7,16 +7,15 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Data
-public class ValetDto extends UserApp {
+public class ValetDto  {
 
     private String firstName;
     private String lastName;
     private Set<Car> cars;
 
     public ValetDto(String username, String password, String firstName, String lastName) {
-        super(username, password);
         this.firstName = firstName;
         this.lastName = lastName;
     }

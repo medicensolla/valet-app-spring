@@ -12,8 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-//TODO : JsonIgnore User a
-public class Technician extends UserApp {
+public class Technician {
 
     @Id
     @SequenceGenerator(
@@ -30,23 +29,22 @@ public class Technician extends UserApp {
     private String firstName;
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private final AppUserRole appUserRole = AppUserRole.TECH;
 
     @OneToMany(mappedBy = "technician", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Car> requestedCars = new HashSet<>();
 
-    public Technician(String username, String password, String firstName, String lastName,
+    @OneToOne(mappedBy = "technician")
+    private UserApp userApp;
+
+    public Technician(String firstName, String lastName,
                       Set<Car> requestedCars) {
-        super(username, password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.requestedCars = requestedCars;
     }
 
-    public Technician(String username, String password, String firstName, String lastName) {
-        super(username, password);
+    public Technician(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

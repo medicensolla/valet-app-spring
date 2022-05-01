@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Valet extends UserApp {
+public class Valet {
 
     @Id
     @SequenceGenerator(
@@ -26,17 +26,16 @@ public class Valet extends UserApp {
     private String firstName;
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
-
-    @OneToMany(mappedBy = "valet")
+    @OneToMany(mappedBy = "valet", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Car> cars;
 
-    public Valet(String username, String password, String firstName, String lastName, AppUserRole appUserRole, Set<Car> cars) {
-        super(username, password);
+    @OneToOne(mappedBy = "valet")
+    private UserApp userApp;
+
+    public Valet(String username, String password, String firstName, String lastName, Set<Car> cars) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.appUserRole = appUserRole;
         this.cars = cars;
     }
 }

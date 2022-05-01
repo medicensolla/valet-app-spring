@@ -6,8 +6,8 @@ import com.medicensoya.valetapp.dto.TechnicianDto;
 import com.medicensoya.valetapp.exception.ApiRequestException;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,10 +16,11 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     /**
      * Creation of a Technician
@@ -30,7 +31,6 @@ public class TechnicianService {
     public TechnicianDto createTechnician(TechnicianDto technicianDto) {
         Technician newTechnician = this.converterFromDtoToObject(technicianDto);
         if (this.technicianValidations(newTechnician)) {
-            newTechnician.setPassword(bCryptPasswordEncoder.encode(newTechnician.getPassword()));
             Technician technicianResponse = this.technicianRepository.save(newTechnician);
             technicianDto = this.converterFromObjToDto(technicianResponse);
         }
@@ -88,10 +88,6 @@ public class TechnicianService {
             } else if (!StringUtils.hasText(technician.getLastName())) {
                 throw new ApiRequestException("Last Name is Mandatory");
 
-            } else if (!StringUtils.hasText(technician.getUsername())) {
-                throw new ApiRequestException("UserName is Mandatory");
-            } else if (this.technicianRepository.existsByUsername(technician.getUsername())) {
-                throw new ApiRequestException("This Username is taken");
             } else {
                 isValid = true;
             }

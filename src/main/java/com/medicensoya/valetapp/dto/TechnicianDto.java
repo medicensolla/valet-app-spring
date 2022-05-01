@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class TechnicianDto extends UserApp {
+public class TechnicianDto {
 
     private Long id;
     private String firstName;
