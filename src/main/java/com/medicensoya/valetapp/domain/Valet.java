@@ -30,7 +30,8 @@ public class Valet {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Car> cars;
 
-    @OneToOne(mappedBy = "valet")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_app_id", referencedColumnName = "id")
     private UserApp userApp;
 
     public Valet(String username, String password, String firstName, String lastName, Set<Car> cars) {

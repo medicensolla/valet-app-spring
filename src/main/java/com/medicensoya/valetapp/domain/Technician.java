@@ -34,7 +34,8 @@ public class Technician {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Car> requestedCars = new HashSet<>();
 
-    @OneToOne(mappedBy = "technician")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_app_id", referencedColumnName = "id")
     private UserApp userApp;
 
     public Technician(String firstName, String lastName,

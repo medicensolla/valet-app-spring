@@ -38,12 +38,10 @@ public class UserApp implements UserDetails {
     private String username;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "technician_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "userApp")
     private Technician technician;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "valet_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "userApp")
     private Valet valet;
 
 
@@ -56,21 +54,21 @@ public class UserApp implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
