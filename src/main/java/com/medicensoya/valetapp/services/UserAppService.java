@@ -45,7 +45,7 @@ public class UserAppService implements UserDetailsService {
         boolean userExists = appUserRepository.findUserAppByUsername(userAppDto.getUsername()).isPresent();
 
         if (userExists) {
-            throw new ApiRequestException("Username Already Taken");
+            throw new ApiRequestException("Username already Taken");
         }
 
 
