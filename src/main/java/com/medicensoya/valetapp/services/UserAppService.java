@@ -23,7 +23,7 @@ import java.util.Objects;
 public class UserAppService implements UserDetailsService {
 
 
-    private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
+    private final static String USER_NOT_FOUND_MSG = "user with username %s not found";
     private final UserAppRepostory appUserRepository;
     private final TechnicianRepository technicianRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
