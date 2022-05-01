@@ -38,26 +38,27 @@ public class UserAppService implements UserDetailsService {
 
     public UserAppDto signUpUser(UserAppDto userAppDto) {
 
-        if (this.userValidations(userAppDto)) {
-            UserApp newUser = this.converterFromDtoToObject(userAppDto);
+        this.userValidations(userAppDto);
 
-            boolean userExists = appUserRepository.findUserAppByUsername(userAppDto.getUsername()).isPresent();
+        UserApp newUser = this.converterFromDtoToObject(userAppDto);
 
-            if (userExists) {
-                throw new ApiRequestException("Username Already Taken");
-            }
+        boolean userExists = appUserRepository.findUserAppByUsername(userAppDto.getUsername()).isPresent();
 
-
-            String encodedPassword = bCryptPasswordEncoder.encode(userAppDto.getPassword());
-
-            newUser.setPassword(encodedPassword);
-
-            if (userAppDto.getAppUserRole().equals(AppUserRole.TECH)) {
-                this.createTechnician(userAppDto, newUser);
-            }
-
-            appUserRepository.save(newUser);
+        if (userExists) {
+            throw new ApiRequestException("Username Already Taken");
         }
+
+
+        String encodedPassword = bCryptPasswordEncoder.encode(userAppDto.getPassword());
+
+        newUser.setPassword(encodedPassword);
+
+        if (userAppDto.getAppUserRole().equals(AppUserRole.TECH)) {
+            this.createTechnician(userAppDto, newUser);
+        }
+
+        appUserRepository.save(newUser);
+
 
         return userAppDto;
 
@@ -74,9 +75,8 @@ public class UserAppService implements UserDetailsService {
     }
 
 
-    private Boolean userValidations(UserAppDto userApp) {
+    private void userValidations(UserAppDto userApp) {
 
-        boolean isValid = false;
 
         if (Objects.nonNull(userApp)) {
 
@@ -87,15 +87,20 @@ public class UserAppService implements UserDetailsService {
             } else if (!StringUtils.hasText(userApp.getPassword())) {
                 throw new ApiRequestException("Password is Mandatory");
 
-            } else {
-                isValid = true;
+            } else if (!StringUtils.hasText(userApp.getFirstName())) {
+
+                throw new ApiRequestException("First Name is Mandatory");
+
+            } else if (!StringUtils.hasText(userApp.getLastName())) {
+                throw new ApiRequestException("Last Name is Mandatory");
+
             }
 
         } else {
             throw new ApiRequestException("User can't be empty");
         }
 
-        return isValid;
+
     }
 
 

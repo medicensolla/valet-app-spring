@@ -10,4 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface CarRepository extends JpaRepository<Car, Long> {
 
+    Boolean existsByTagNumber(String tagNumber);
+
 }

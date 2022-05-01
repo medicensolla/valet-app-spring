@@ -4,6 +4,7 @@ import com.medicensoya.valetapp.domain.Car;
 import com.medicensoya.valetapp.domain.Technician;
 import com.medicensoya.valetapp.dto.TechnicianDto;
 import com.medicensoya.valetapp.exception.ApiRequestException;
+import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.Set;
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
+    private final CarRepository carRepository;
 
 
     /**
@@ -47,7 +49,9 @@ public class TechnicianService {
     public String requestCars(Long idTechnician,
                               Set<Car> requestedCars) {
         Technician technicianUpdate = this.technicianRepository.getTechnicianById(idTechnician);
+
         if (Objects.nonNull(technicianUpdate)) {
+            this.isCarAlreadyRequested(requestedCars);
             requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
             technicianUpdate.getRequestedCars().addAll(requestedCars);
             this.technicianRepository.save(technicianUpdate);
@@ -56,6 +60,34 @@ public class TechnicianService {
         }
         //TODO Change response
         return "Success";
+    }
+
+    /**
+     * Validates that the car being requested is not already assigned
+     *
+     * @param requestedCars The cars that are being requested
+     */
+    private void isCarAlreadyRequested(Set<Car> requestedCars) {
+
+        if (Objects.nonNull(requestedCars)) {
+
+            for (Car car : requestedCars) {
+
+                if (car.getTagNumber().length() > 4) {
+                    throw new ApiRequestException("Tag Number can't be longer than 4 digits");
+                }
+
+                if (this.carRepository.existsByTagNumber(car.getTagNumber())) {
+
+                    throw new ApiRequestException
+                            (String.format("The Tag number %s has been already requested", car.getTagNumber()));
+
+
+                }
+            }
+
+        }
+
     }
 
 
