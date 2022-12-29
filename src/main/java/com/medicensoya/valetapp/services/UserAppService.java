@@ -84,14 +84,17 @@ public class UserAppService implements UserDetailsService {
 
                 throw new ApiRequestException("Username is Mandatory");
 
-            } else if (!StringUtils.hasText(userApp.getPassword())) {
+            }
+            if (!StringUtils.hasText(userApp.getPassword())) {
                 throw new ApiRequestException("Password is Mandatory");
 
-            } else if (!StringUtils.hasText(userApp.getFirstName())) {
+            }
+            if (!StringUtils.hasText(userApp.getFirstName())) {
 
                 throw new ApiRequestException("First Name is Mandatory");
 
-            } else if (!StringUtils.hasText(userApp.getLastName())) {
+            }
+            if (!StringUtils.hasText(userApp.getLastName())) {
                 throw new ApiRequestException("Last Name is Mandatory");
 
             }
