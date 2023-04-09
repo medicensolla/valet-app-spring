@@ -7,8 +7,10 @@ import com.medicensoya.valetapp.exception.ApiRequestException;
 import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,13 +18,18 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
     private final CarRepository carRepository;
 
+
+    @Autowired
+    public TechnicianService(TechnicianRepository technicianRepository, CarRepository carRepository) {
+        this.technicianRepository = technicianRepository;
+        this.carRepository = carRepository;
+    }
 
     /**
      * Creation of a Technician
@@ -67,7 +74,7 @@ public class TechnicianService {
      *
      * @param requestedCars The cars that are being requested
      */
-    private void isCarAlreadyRequested(Set<Car> requestedCars) {
+    public void isCarAlreadyRequested(Set<Car> requestedCars) {
 
         if (Objects.nonNull(requestedCars)) {
 
@@ -107,7 +114,7 @@ public class TechnicianService {
         return technicianDto;
     }
 
-    private Boolean technicianValidations(Technician technician) {
+    public Boolean technicianValidations(Technician technician) {
 
         boolean isValid = false;
 

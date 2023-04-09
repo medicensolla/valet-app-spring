@@ -1,7 +1,7 @@
 spring:
   datasource:
     password: Test123*
-    url: jdbc:postgresql://localhost:5432/valetapp
+    url: jdbc:postgresql://localhost:5432/valetappDB
     username: valetappuser
   jpa:
     hibernate:
