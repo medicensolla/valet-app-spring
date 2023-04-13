@@ -9,6 +9,7 @@ import com.medicensoya.valetapp.repositories.TechnicianRepository;
 import com.medicensoya.valetapp.repositories.UserAppRepostory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,11 +23,11 @@ import java.util.Objects;
 @AllArgsConstructor
 public class UserAppService implements UserDetailsService {
 
-
-    private final static String USER_NOT_FOUND_MSG = "user with username %s not found";
+    public static final String USER_NOT_FOUND_MSG = "user with username %s not found";
     private final UserAppRepostory appUserRepository;
     private final TechnicianRepository technicianRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public UserDetails loadUserByUsername(String username)

@@ -29,7 +29,7 @@ public class TechnicianController {
 
     }
 
-    @PutMapping("/request-car")
+    @PutMapping("/request-cars")
     public ResponseEntity<Object> requestACar(@RequestParam Long technicianId,
                                               @RequestBody Set<Car> requestedCars) {
 

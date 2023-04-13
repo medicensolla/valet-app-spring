@@ -6,16 +6,15 @@ import com.medicensoya.valetapp.dto.TechnicianDto;
 import com.medicensoya.valetapp.exception.ApiRequestException;
 import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.TechnicianRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,6 +38,7 @@ public class TechnicianService {
      */
     public TechnicianDto createTechnician(TechnicianDto technicianDto) {
         Technician newTechnician = this.converterFromDtoToObject(technicianDto);
+
         if (this.technicianValidations(newTechnician)) {
             Technician technicianResponse = this.technicianRepository.save(newTechnician);
             technicianDto = this.converterFromObjToDto(technicianResponse);
@@ -62,11 +62,10 @@ public class TechnicianService {
             requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
             technicianUpdate.getRequestedCars().addAll(requestedCars);
             this.technicianRepository.save(technicianUpdate);
+            return "Cars successfully requested";
         } else {
             throw new ApiRequestException("This Technician doesn't have access");
         }
-        //TODO Change response
-        return "Success";
     }
 
     /**
@@ -78,20 +77,27 @@ public class TechnicianService {
 
         if (Objects.nonNull(requestedCars)) {
 
-            for (Car car : requestedCars) {
-
+            requestedCars.forEach(car -> {
                 if (car.getTagNumber().length() > 4) {
                     throw new ApiRequestException("Tag Number can't be longer than 4 digits");
                 }
-
-                if (this.carRepository.existsByTagNumber(car.getTagNumber())) {
-
-                    throw new ApiRequestException
-                            (String.format("The Tag number %s has been already requested", car.getTagNumber()));
+            });
 
 
-                }
+            List<Car> requestedCarsInDataBase = this.carRepository.getCarsByTagNumberIn(requestedCars.stream()
+                    .map(Car::getTagNumber).collect(Collectors.toSet()));
+
+            if (!requestedCarsInDataBase.isEmpty()) {
+                List<String> tagNumbers = requestedCarsInDataBase.stream()
+                        .map(Car::getTagNumber)
+                        .collect(Collectors.toList());
+                List<String> names = requestedCarsInDataBase.stream()
+                        .map(car -> car.getTechnician().getFirstName())
+                        .collect(Collectors.toList());
+                throw new ApiRequestException(String.format("The Tag numbers %s have already been requested by technicians: %s",
+                        String.join(", ", tagNumbers), String.join(", ", names)));
             }
+
 
         }
 
