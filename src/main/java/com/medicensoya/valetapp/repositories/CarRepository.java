@@ -16,7 +16,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     boolean existsByTagNumber(String tagNumber);
 
-    List<Car> getCarsByTagNumberIn(Set<String> tagNumbers);
+    List<Car> findCarsByTagNumberIn(Set<String> tagNumbers);
 
 
 }
+

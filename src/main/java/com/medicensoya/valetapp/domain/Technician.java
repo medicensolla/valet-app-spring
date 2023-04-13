@@ -1,5 +1,6 @@
 package com.medicensoya.valetapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,10 +31,13 @@ public class Technician {
     private String lastName;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "technician", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Car> requestedCars = new HashSet<>();
+    private Set<Car> requestedCars;
 
+
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_app_id", referencedColumnName = "id")
     private UserApp userApp;

@@ -37,11 +37,11 @@ public class TechnicianService {
      * @return a Dto with the technician already saved
      */
     public TechnicianDto createTechnician(TechnicianDto technicianDto) {
-        Technician newTechnician = this.converterFromDtoToObject(technicianDto);
+        Technician newTechnician = converterFromDtoToObject(technicianDto);
 
         if (this.technicianValidations(newTechnician)) {
-            Technician technicianResponse = this.technicianRepository.save(newTechnician);
-            technicianDto = this.converterFromObjToDto(technicianResponse);
+            Technician technicianResponse = technicianRepository.save(newTechnician);
+            technicianDto = converterFromObjToDto(technicianResponse);
         }
         return technicianDto;
     }
@@ -55,13 +55,13 @@ public class TechnicianService {
      */
     public String requestCars(Long idTechnician,
                               Set<Car> requestedCars) {
-        Technician technicianUpdate = this.technicianRepository.getTechnicianById(idTechnician);
+        Technician technicianUpdate = technicianRepository.getTechnicianById(idTechnician);
 
         if (Objects.nonNull(technicianUpdate)) {
-            this.isCarAlreadyRequested(requestedCars);
+            isCarAlreadyRequested(requestedCars);
             requestedCars.forEach(car -> car.setTechnician(technicianUpdate));
             technicianUpdate.getRequestedCars().addAll(requestedCars);
-            this.technicianRepository.save(technicianUpdate);
+            technicianRepository.save(technicianUpdate);
             return "Cars successfully requested";
         } else {
             throw new ApiRequestException("This Technician doesn't have access");
@@ -84,7 +84,7 @@ public class TechnicianService {
             });
 
 
-            List<Car> requestedCarsInDataBase = this.carRepository.getCarsByTagNumberIn(requestedCars.stream()
+            List<Car> requestedCarsInDataBase = carRepository.findCarsByTagNumberIn(requestedCars.stream()
                     .map(Car::getTagNumber).collect(Collectors.toSet()));
 
             if (!requestedCarsInDataBase.isEmpty()) {

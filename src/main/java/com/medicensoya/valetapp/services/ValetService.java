@@ -1,6 +1,6 @@
 package com.medicensoya.valetapp.services;
 
-import com.medicensoya.valetapp.domain.Car;
+import com.medicensoya.valetapp.repositories.CarRepository;
 import com.medicensoya.valetapp.repositories.ValetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,10 @@ import java.util.List;
 public class ValetService {
 
     private final ValetRepository valetRepository;
+
+    private final CarService carService;
+
+
 
 
 

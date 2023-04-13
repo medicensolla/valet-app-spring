@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CarDto {
 
-    private Long id;
-
     private String tagNumber;
 
     private Valet valet;
